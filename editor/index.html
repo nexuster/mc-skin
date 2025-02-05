@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Pixel Art Editor</h1>
+    <div>
+        <label for="size">Canvas Size:</label>
+        <select id="size">
+            <option value="64">64x64</option>
+            <option value="128">128x128</option>
+        </select>
+        <button id="zoomIn">Zoom In</button>
+        <button id="zoomOut">Zoom Out</button>
+    </div>
+    <div id="canvasContainer">
+        <canvas id="canvas"></canvas>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

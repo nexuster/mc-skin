@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#canvasContainer {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+canvas {
+    border: 1px solid #000;
+}
+
+button {
+    margin: 5px;
+}
