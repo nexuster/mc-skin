@@ -3,9 +3,19 @@ body {
     text-align: center;
 }
 
+#editorContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
 #canvasContainer {
     display: inline-block;
-    margin-top: 20px;
+}
+
+#historyContainer {
+    margin-left: 20px;
+    text-align: left;
 }
 
 canvas {
@@ -14,4 +24,14 @@ canvas {
 
 button {
     margin: 5px;
+}
+
+#history img {
+    display: block;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+}
+
+#history img.selected {
+    border: 2px solid #000;
 }

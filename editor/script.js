@@ -8,6 +8,7 @@ const undoBtn = document.getElementById('undo');
 const redoBtn = document.getElementById('redo');
 const zoomInBtn = document.getElementById('zoomIn');
 const zoomOutBtn = document.getElementById('zoomOut');
+const historyContainer = document.getElementById('history');
 
 let pixelSize = 10;
 let canvasSize = 64;
@@ -31,25 +32,52 @@ function drawGrid() {
 }
 
 function saveState() {
-    history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+    const state = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    history.push(state);
     if (history.length > 100) history.shift();  // Limit history to 100 states
     redoStack = []; // Clear redo stack
+    updateHistoryDisplay();
 }
 
 function undo() {
-    if (history.length > 0) {
-        redoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
-        let lastState = history.pop();
+    if (history.length > 1) {
+        redoStack.push(history.pop());
+        let lastState = history[history.length - 1];
         ctx.putImageData(lastState, 0, 0);
+        updateHistoryDisplay();
     }
 }
 
 function redo() {
     if (redoStack.length > 0) {
-        history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
         let lastRedoState = redoStack.pop();
+        history.push(lastRedoState);
         ctx.putImageData(lastRedoState, 0, 0);
+        updateHistoryDisplay();
     }
+}
+
+function updateHistoryDisplay() {
+    historyContainer.innerHTML = '';
+    history.forEach((state, index) => {
+        const canvasThumbnail = document.createElement('canvas');
+        canvasThumbnail.width = canvas.width / 10;
+        canvasThumbnail.height = canvas.height / 10;
+        const thumbnailCtx = canvasThumbnail.getContext('2d');
+        thumbnailCtx.putImageData(state, 0, 0, 0, 0, canvasThumbnail.width, canvasThumbnail.height);
+
+        const img = new Image();
+        img.src = canvasThumbnail.toDataURL();
+        img.classList.add('history-thumbnail');
+        img.addEventListener('click', () => {
+            ctx.putImageData(state, 0, 0);
+            history = history.slice(0, index + 1);
+            redoStack = [];
+            updateHistoryDisplay();
+        });
+
+        historyContainer.appendChild(img);
+    });
 }
 
 function fillBucket(x, y, targetColor) {
@@ -131,6 +159,7 @@ canvas.addEventListener('mousemove', (e) => {
 
 canvas.addEventListener('mouseup', () => {
     isMouseDown = false;
+    saveState();
 });
 
 canvas.addEventListener('mouseout', () => {
